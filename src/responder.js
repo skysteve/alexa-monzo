@@ -21,7 +21,7 @@ export class Responder {
     if (shouldEnd === undefined) {
       shouldEnd = true;
     }
-    this.callback({
+    this.callback(null, {
       version: this.version,
       response: {
         outputSpeech: {
