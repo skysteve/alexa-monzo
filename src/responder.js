@@ -3,7 +3,7 @@
  */
 import { version } from '../package.json';
 
-export class Responder {
+export class Responder { // eslint-disable-line import/prefer-default-export
 
   constructor(callback) {
     this.callback = callback;
@@ -17,7 +17,10 @@ export class Responder {
     return version.substring(0, version.lastIndexOf('.'));
   }
 
-  respond(output, shouldEnd = true) {
+  respond(output, shouldEnd) {
+    if (shouldEnd === undefined) {
+      shouldEnd = true;
+    }
     this.callback({
       version: this.version,
       response: {

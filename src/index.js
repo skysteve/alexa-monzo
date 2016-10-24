@@ -1,7 +1,7 @@
 /**
  * Created by steve on 24/10/2016.
  */
-import {Responder} from './responder';
+import { Responder } from './responder';
 
 export function handler(event, context, callback) { // eslint-disable-line import/prefer-default-export
   try {
@@ -11,7 +11,7 @@ export function handler(event, context, callback) { // eslint-disable-line impor
 
     const responder = new Responder(callback);
 
-    responder.respond(`Hello world`, true);
+    responder.respond('Hello world', true);
   } catch (err) {
     console.log(err);
     callback(err);

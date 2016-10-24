@@ -1,6 +1,7 @@
 {
   "extends": "airbnb/base",
   "rules" : {
+    "class-methods-use-this": 0,
     "comma-dangle" : 0,
     "no-unused-vars" : 1,
     "object-shorthand" : 0,
