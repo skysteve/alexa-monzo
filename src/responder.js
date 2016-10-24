@@ -3,7 +3,7 @@
  */
 import { version } from '../package.json';
 
-export class Responder { // eslint-disable-line import/prefer-default-export
+export class Responder {
 
   constructor(callback) {
     this.callback = callback;

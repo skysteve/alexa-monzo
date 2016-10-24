@@ -3,7 +3,7 @@
  */
 import { Responder } from './responder';
 
-export function handler(event, context, callback) { // eslint-disable-line import/prefer-default-export
+export function handler(event, context, callback) {
   try {
     if (event.session.application.applicationId !== 'ALEXA_SKILL_ID') {
       callback('Invalid Application ID');
