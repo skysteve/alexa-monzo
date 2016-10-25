@@ -60,7 +60,7 @@ export class Monzo {
       return result;
     })
     .then((result) => {
-      if (typeof result === string) {
+      if (typeof result === 'string') {
         return result;
       }
       // e.g. "Your account balance is 15 pounds 24 pence. Today you have spent 3 pounds 18 pence"
