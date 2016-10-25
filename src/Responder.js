@@ -9,6 +9,11 @@ export class Responder {
     this.callback = callback;
   }
 
+  errorHandler(err) {
+    console.log(err);
+    this.callback(err);
+  }
+
   get cardTitle() {
     return 'Monzo';
   }
@@ -17,7 +22,28 @@ export class Responder {
     return version.substring(0, version.lastIndexOf('.'));
   }
 
-  respond(output, shouldEnd) {
+  setCard(content) {
+    this.card = {
+      type: 'Simple',
+      title: this.cardTitle,
+      content: content
+    };
+  }
+
+  setReprompt(text) {
+    this.reprompt = {
+      outputSpeech: {
+        type: 'PlainText',
+        text: text
+      }
+    };
+  }
+
+  setResponseText(text) {
+    this.responseText = text;
+  }
+
+  respond(shouldEnd) {
     if (shouldEnd === undefined) {
       shouldEnd = true;
     }
@@ -26,13 +52,10 @@ export class Responder {
       response: {
         outputSpeech: {
           type: 'PlainText',
-          text: output
+          text: this.responseText
         },
-        card: {
-          type: 'Simple',
-          title: this.cardTitle,
-          content: output
-        },
+        card: this.card,
+        reprompt: this.reprompt,
         shouldEndSession: shouldEnd
       }
     });
