@@ -36,6 +36,11 @@ export class Monzo {
   getBalance() {
     return makeRequest('balance', this.token)
     .then((result) => {
+      if (!result || !result.balance) {
+        console.log(result);
+        return 'Failed to read response, please ensure your account is linked in the app';
+      }
+
       const balance = result.balance / 100;
       const spentToday = result.spend_today / 100;
 
@@ -55,6 +60,9 @@ export class Monzo {
       return result;
     })
     .then((result) => {
+      if (typeof result === string) {
+        return result;
+      }
       // e.g. "Your account balance is 15 pounds 24 pence. Today you have spent 3 pounds 18 pence"
       return `Your account balance is ${result.balance.units} ${result.currency[0]} ${result.balance.decimal} ${result.currency[1]}.
       Today you have spent ${result.spend_today.units} ${result.currency[0]} ${result.spend_today.decimal} ${result.currency[1]}`;
