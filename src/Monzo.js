@@ -44,12 +44,12 @@ export class Monzo {
       // monzo returns us balance in pence, convert to units and decimals.
       result.balance = {
         units: Math.floor(balance),
-        decimal: (balance % 1).toFixed(2)
+        decimal: Math.round((balance % 1) * 100)
       };
 
       result.spend_today = {
         units: Math.floor(spentToday),
-        decimal: (spentToday % 1).toFixed(2)
+        decimal: Math.round((balance % 1) * 100)
       };
 
       return result;
