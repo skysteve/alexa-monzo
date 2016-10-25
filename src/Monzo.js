@@ -1,7 +1,7 @@
 /**
  * Created by steve on 24/10/2016.
  */
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 const baseURL = 'https://api.monzo.com';
 
