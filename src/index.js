@@ -18,6 +18,9 @@ export function handler(event, context, callback) {
       return callback('Invalid Application ID');
     }
 
+    console.log('************ EVENT ************');
+    console.log(event);
+
     const responder = new Responder(callback);
 
     switch (event.request.type) {

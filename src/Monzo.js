@@ -19,6 +19,7 @@ const mapCurrency = {
  * @returns {Promise<object>} promise which returns a JSON response from the api
  */
 function makeRequest(urlPath, token) {
+  console.log(`***** MAKING REQUEST WITH TOKEN ${token}  *********`);
   return fetch(`${baseURL}/url`, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -30,12 +31,16 @@ function makeRequest(urlPath, token) {
 export class Monzo {
 
   constructor(token) {
+    console.log(`******* CREATING SKILL WITH TOKEN ${token} *********`);
     this.token = token;
   }
 
   getBalance() {
     return makeRequest('balance', this.token)
     .then((result) => {
+      console.log('************ MONZO RESPONSE *************');
+      console.log(result);
+
       if (!result || !result.balance) {
         console.log(result);
         return 'Failed to read response, please ensure your account is linked in the app';
