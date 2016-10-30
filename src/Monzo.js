@@ -19,8 +19,8 @@ const mapCurrency = {
  * @returns {Promise<object>} promise which returns a JSON response from the api
  */
 function makeRequest(urlPath, token) {
-  console.log(`***** MAKING REQUEST WITH TOKEN ${token}  *********`);
-  return fetch(`${baseURL}/url`, {
+  console.log(`***** MAKING REQUEST WITH TOKEN ${token} to ${urlPath} *********`);
+  return fetch(`${baseURL}/${urlPath}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -35,42 +35,52 @@ export class Monzo {
     this.token = token;
   }
 
-  getBalance() {
-    return makeRequest('balance', this.token)
-    .then((result) => {
-      console.log('************ MONZO RESPONSE *************');
-      console.log(result);
-
-      if (!result || !result.balance) {
+  getAccount() {
+    return makeRequest('accounts', this.token)
+      .then((result) => {
+        console.log('************ MONZO RESPONSE *************');
         console.log(result);
-        return 'Failed to read response, please ensure your account is linked in the app';
-      }
+        return result.accounts[0].id;
+      })
+  }
 
-      const balance = result.balance / 100;
-      const spentToday = result.spend_today / 100;
+  getBalance() {
+    return getAccount()
+      .then(accountId => makeRequest(`balance?account_id=${accountId}`, this.token))
+      .then((result) => {
+        console.log('************ MONZO RESPONSE *************');
+        console.log(result);
 
-      result.currency = mapCurrency[result.currency.toLowerCase()];
+        if (!result || !result.balance) {
+          console.log(result);
+          return 'Failed to read response, please ensure your account is linked in the app';
+        }
 
-      // monzo returns us balance in pence, convert to units and decimals.
-      result.balance = {
-        units: Math.floor(balance),
-        decimal: Math.round((balance % 1) * 100)
-      };
+        const balance = result.balance / 100;
+        const spentToday = result.spend_today / 100;
 
-      result.spend_today = {
-        units: Math.floor(spentToday),
-        decimal: Math.round((balance % 1) * 100)
-      };
+        result.currency = mapCurrency[result.currency.toLowerCase()];
 
-      return result;
-    })
-    .then((result) => {
-      if (typeof result === 'string') {
+        // monzo returns us balance in pence, convert to units and decimals.
+        result.balance = {
+          units: Math.floor(balance),
+          decimal: Math.round((balance % 1) * 100)
+        };
+
+        result.spend_today = {
+          units: Math.floor(spentToday),
+          decimal: Math.round((balance % 1) * 100)
+        };
+
         return result;
-      }
-      // e.g. "Your account balance is 15 pounds 24 pence. Today you have spent 3 pounds 18 pence"
-      return `Your account balance is ${result.balance.units} ${result.currency[0]} ${result.balance.decimal} ${result.currency[1]}.
+      })
+      .then((result) => {
+        if (typeof result === 'string') {
+          return result;
+        }
+        // e.g. "Your account balance is 15 pounds 24 pence. Today you have spent 3 pounds 18 pence"
+        return `Your account balance is ${result.balance.units} ${result.currency[0]} ${result.balance.decimal} ${result.currency[1]}.
       Today you have spent ${result.spend_today.units} ${result.currency[0]} ${result.spend_today.decimal} ${result.currency[1]}`;
-    });
+      });
   }
 }
