@@ -34,7 +34,7 @@ export class Monzo {
     this.token = token;
     if (sessionAttrs) {
       console.log('***** RECOVERING ACCOUNT ID FROM SESSION', sessionAttrs);
-      this.accountId = sessionAttrs.accountId || undefined;
+      this.accountId = sessionAttrs.monzoAccountId || undefined;
     }
   }
 
