@@ -16,6 +16,8 @@ export class IntentHandler {
     switch (intentName) {
       case 'GetBalance':
         return this.intent_GetBalance();
+      case 'GetTransactions':
+        return this.intent_getTransactions();
       default:
         this.responder.setCard(`Unknown req ${intentName}`);
         this.responder.respond(true);
@@ -35,7 +37,19 @@ export class IntentHandler {
         responder.setSessionAttributes({
           monzoAccountId: accountId
         });
-        responder.respond(false);
+        responder.respond(true);
+      })
+      .catch((ex) => responder.errorHandler(ex));
+  }
+
+  intent_getTransactions() {
+    const responder = this.responder;
+
+    this.monzoClient.getTransactions()
+      .then((transactions) => {
+        responder.setCard(transactions);
+        responder.setResponseText(transactions);
+        responder.respond(true);
       })
       .catch((ex) => responder.errorHandler(ex));
   }
