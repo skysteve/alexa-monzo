@@ -9,9 +9,6 @@ export class IntentHandler {
     this.session = session;
     this.responder = responder;
 
-    console.log('****** SESSION ATTRIBUTES');
-    console.log(JSON.stringify(session.attributes, null, 4));
-
     this.monzoClient = new Monzo(session.user.accessToken, session.attributes);
   }
 

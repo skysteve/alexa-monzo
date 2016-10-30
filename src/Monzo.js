@@ -46,6 +46,7 @@ export class Monzo {
     return makeRequest('accounts', this.token)
       .then((result) => {
         if (!result || !result.accounts) {
+          console.log(JSON.stringify(result, null, 4));
           return 'Failed to read response, please ensure your account is linked in the app';
         }
         return result.accounts[0].id;
