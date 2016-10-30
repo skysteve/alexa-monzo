@@ -19,7 +19,7 @@ const mapCurrency = {
  * @returns {Promise<object>} promise which returns a JSON response from the api
  */
 function makeRequest(urlPath, token) {
-  console.log(`***** MAKING REQUEST WITH TOKEN ${token} to ${urlPath} *********`);
+  console.log(`***** MAKING REQUEST TO ${urlPath} *********`);
   return fetch(`${baseURL}/${urlPath}`, {
     headers: {
       Authorization: `Bearer ${token}`
