@@ -9,6 +9,9 @@ export class IntentHandler {
     this.session = session;
     this.responder = responder;
 
+    console.log('****** SESSION ATTRIBUTES');
+    console.log(JSON.stringify(session.attributes, null, 4));
+
     this.monzoClient = new Monzo(session.user.accessToken, session.attributes);
   }
 
@@ -17,7 +20,7 @@ export class IntentHandler {
       case 'GetBalance':
         return this.intent_GetBalance();
       case 'GetTransactions':
-        return this.intent_getTransactions();
+        return this.intent_getTransactions(this.session.attributes.dateStart, this.session.attributes.dateEnd, this.session.attributes.limit);
       default:
         this.responder.setCard(`Unknown req ${intentName}`);
         this.responder.respond(true);

@@ -126,7 +126,7 @@ export class Monzo {
         let response = 'Your transactions are follows: ';
 
         response += transactions.map((transaction) => {
-          const amount = Math.abs(transaction.amount)/100;
+          const amount = Math.abs(transaction.amount) / 100;
           const currency = mapCurrency[transaction.currency.toLowerCase()];
 
           transaction.amount = {
@@ -134,10 +134,10 @@ export class Monzo {
             decimal: Math.round((amount % 1) * 100)
           };
 
-          let string = `${transaction.description }:  ${transaction.balance.units} ${currency[0]} ${transaction.balance.decimal} ${currency[1]}`;
-
-          return string
+          return `${transaction.description}: ${transaction.balance.units} ${currency[0]} ${transaction.balance.decimal} ${currency[1]}`;
         }).join(', ');
+
+        return response;
       });
   }
 

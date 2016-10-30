@@ -8,3 +8,7 @@ GetBalance what's my account balance
 GetBalance for my account balance
 
 GetTransactions for my transactions
+GetTransactions for my last {limit} transactions
+GetTransactions for my transactions {dateStart}
+GetTransactions for my {dateStart} transactions
+GetTransactions for my transactions between {dateStart} and {dateEnd}
