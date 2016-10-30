@@ -45,6 +45,9 @@ export class Monzo {
 
     return makeRequest('accounts', this.token)
       .then((result) => {
+        if (!result || !result.accounts) {
+          return 'Failed to read response, please ensure your account is linked in the app';
+        }
         return result.accounts[0].id;
       })
       .then((accountId) => {
@@ -60,7 +63,6 @@ export class Monzo {
         if (!result || !result.balance) {
           return 'Failed to read response, please ensure your account is linked in the app';
         }
-
         const balance = result.balance / 100;
         const spentToday = result.spend_today / 100;
 
@@ -88,4 +90,55 @@ export class Monzo {
       Today you have spent ${result.spend_today.units} ${result.currency[0]} ${result.spend_today.decimal} ${result.currency[1]}`;
       });
   }
+
+  getTransactions(start, end, limit) {
+    return this.getAccountId()
+      .then((accountId) => {
+        let url = `transactions?account_id=${accountId}`;
+
+        if (start) {
+          url += `&since=${start}`;
+        }
+
+        if (end) {
+          url += `&before=${end}`;
+        }
+
+        if (limit) {
+          limit = 3; // TODO more than 3
+        }
+
+        url += `&limit=${limit}`;
+
+        return makeRequest(url, this.token);
+      })
+      .then((result) => {
+        if (!result || !result.transactions) {
+          return 'Failed to read response, please ensure your account is linked in the app';
+        }
+
+        const transactions = result.transactions;
+
+        if (transactions.length < 1) {
+          return 'There are no transactions for that period';
+        }
+
+        let response = 'Your transactions are follows: ';
+
+        response += transactions.map((transaction) => {
+          const amount = Math.abs(transaction.amount) / 100;
+          const currency = mapCurrency[transaction.currency.toLowerCase()];
+
+          transaction.amount = {
+            units: Math.floor(amount),
+            decimal: Math.round((amount % 1) * 100)
+          };
+
+          return `${transaction.description}: ${transaction.balance.units} ${currency[0]} ${transaction.balance.decimal} ${currency[1]}`;
+        }).join(', ');
+
+        return response;
+      });
+  }
+
 }

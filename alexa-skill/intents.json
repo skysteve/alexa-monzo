@@ -2,6 +2,27 @@
   "intents": [
     {
       "intent": "GetBalance"
+    },
+    {
+      "intent": "GetTransactions",
+      "slots": [
+        {
+          "name": "dateStart",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "dateEnd",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "limit",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+
+    },
+    {
+      "intent" : "AMAZON.NoIntent"
     }
   ]
 }
