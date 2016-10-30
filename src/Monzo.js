@@ -105,8 +105,8 @@ export class Monzo {
           url += `&before=${end}`;
         }
 
-        if (limit) {
-          limit = 3; // TODO more than 3
+        if (!limit) {
+          limit = 3;
         }
 
         url += `&limit=${limit}`;
@@ -115,6 +115,7 @@ export class Monzo {
       })
       .then((result) => {
         if (!result || !result.transactions) {
+          console.log(JSON.stringify(result, null, 4));
           return 'Failed to read response, please ensure your account is linked in the app';
         }
 
