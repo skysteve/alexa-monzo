@@ -36,16 +36,24 @@ export class Monzo {
   }
 
   getAccount() {
+    if (this.accountId) {
+      return Promise.resolve(this.accountId);
+    }
+
     return makeRequest('accounts', this.token)
       .then((result) => {
         console.log('************ MONZO RESPONSE *************');
         console.log(result);
         return result.accounts[0].id;
       })
+      .then((accountId) => {
+        this.accountId = accountId;
+        return accountId;
+      });
   }
 
   getBalance() {
-    return getAccount()
+    return this.getAccount()
       .then(accountId => makeRequest(`balance?account_id=${accountId}`, this.token))
       .then((result) => {
         console.log('************ MONZO RESPONSE *************');
