@@ -93,6 +93,7 @@ export class Monzo {
   }
 
   getTransactions(start, end, limit) {
+    console.log('get transactions', start, end, limit);
     return this.getAccountId()
       .then((accountId) => {
         let url = `transactions?account_id=${accountId}`;
@@ -136,7 +137,7 @@ export class Monzo {
             decimal: Math.round((amount % 1) * 100)
           };
 
-          return `${transaction.description}: ${transaction.balance.units} ${currency[0]} ${transaction.balance.decimal} ${currency[1]}`;
+          return `${transaction.description}: ${transaction.amount.units} ${currency[0]} ${transaction.amount.decimal} ${currency[1]}`;
         }).join(', ');
 
         return response;
