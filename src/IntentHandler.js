@@ -14,7 +14,7 @@ export class IntentHandler {
 
   handleIntent(intentName) {
     const intentValues = this.request.intent.slots;
-console.log('INTENT VALUES', JSON.stringify(intentValues, null, 4));
+    console.log('INTENT VALUES', JSON.stringify(intentValues, null, 4));
     switch (intentName) {
       case 'GetBalance':
         return this.intent_GetBalance();
