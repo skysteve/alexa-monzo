@@ -16,11 +16,13 @@ export class IntentHandler {
   }
 
   handleIntent(intentName) {
+    const intentValues = this.request.intent.slots;
+
     switch (intentName) {
       case 'GetBalance':
         return this.intent_GetBalance();
       case 'GetTransactions':
-        return this.intent_getTransactions(this.session.attributes.dateStart, this.session.attributes.dateEnd, this.session.attributes.limit);
+        return this.intent_getTransactions(intentValues.dateStart.value, intentValues.dateEnd.value, intentValues.limit.value);
       default:
         this.responder.setCard(`Unknown req ${intentName}`);
         this.responder.respond(true);
