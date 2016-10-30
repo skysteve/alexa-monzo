@@ -30,20 +30,21 @@ function makeRequest(urlPath, token) {
 
 export class Monzo {
 
-  constructor(token) {
-    console.log(`******* CREATING SKILL WITH TOKEN ${token} *********`);
+  constructor(token, sessionAttrs) {
     this.token = token;
+    if (sessionAttrs) {
+      console.log('***** RECOVERING ACCOUNT ID FROM SESSION', sessionAttrs);
+      this.accountId = sessionAttrs.accountId || undefined;
+    }
   }
 
-  getAccount() {
+  getAccountId() {
     if (this.accountId) {
       return Promise.resolve(this.accountId);
     }
 
     return makeRequest('accounts', this.token)
       .then((result) => {
-        console.log('************ MONZO RESPONSE *************');
-        console.log(result);
         return result.accounts[0].id;
       })
       .then((accountId) => {
@@ -53,14 +54,10 @@ export class Monzo {
   }
 
   getBalance() {
-    return this.getAccount()
+    return this.getAccountId()
       .then(accountId => makeRequest(`balance?account_id=${accountId}`, this.token))
       .then((result) => {
-        console.log('************ MONZO RESPONSE *************');
-        console.log(result);
-
         if (!result || !result.balance) {
-          console.log(result);
           return 'Failed to read response, please ensure your account is linked in the app';
         }
 
@@ -77,7 +74,7 @@ export class Monzo {
 
         result.spend_today = {
           units: Math.floor(spentToday),
-          decimal: Math.round((balance % 1) * 100)
+          decimal: Math.round((spentToday % 1) * 100)
         };
 
         return result;

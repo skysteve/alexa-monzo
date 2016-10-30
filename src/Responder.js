@@ -43,12 +43,17 @@ export class Responder {
     this.responseText = text;
   }
 
+  setSessionAttributes(objAttrs) {
+    this.sessionAttrs = objAttrs;
+  }
+
   respond(shouldEnd) {
     if (shouldEnd === undefined) {
       shouldEnd = true;
     }
     this.callback(null, {
       version: this.version,
+      sessionAttributes: this.sessionAttrs,
       response: {
         outputSpeech: {
           type: 'PlainText',

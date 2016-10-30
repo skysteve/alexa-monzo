@@ -9,7 +9,7 @@ export class IntentHandler {
     this.session = session;
     this.responder = responder;
 
-    this.monzoClient = new Monzo(session.user.accessToken);
+    this.monzoClient = new Monzo(session.user.accessToken, session.attributes);
   }
 
   handleIntent(intentName) {
@@ -29,6 +29,12 @@ export class IntentHandler {
       .then((balance) => {
         responder.setCard(balance);
         responder.setResponseText(balance);
+        return this.monzoClient.getAccountId();
+      })
+      .then((accountId) => {
+        responder.setSessionAttributes({
+          monzoAccountId: accountId
+        });
         responder.respond(false);
       })
       .catch((ex) => responder.errorHandler(ex));
