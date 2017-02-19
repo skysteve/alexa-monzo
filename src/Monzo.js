@@ -88,7 +88,7 @@ export class Monzo {
         }
         // e.g. "Your account balance is 15 pounds 24 pence. Today you have spent 3 pounds 18 pence"
         return `Your account balance is ${result.balance.units} ${result.currency[0]} ${result.balance.decimal} ${result.currency[1]}.
-      Today you have spent ${result.spend_today.units} ${result.currency[0]} ${result.spend_today.decimal} ${result.currency[1]}`;
+      Today you have spent ${Math.abs(result.spend_today.units)} ${result.currency[0]} ${Math.abs(result.spend_today.decimal)} ${result.currency[1]}`;
       });
   }
 
